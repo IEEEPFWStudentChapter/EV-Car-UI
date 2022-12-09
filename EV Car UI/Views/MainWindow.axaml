@@ -1,0 +1,136 @@
+<Window xmlns="https://github.com/avaloniaui"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:vm="using:EV_Car_UI.ViewModels"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        mc:Ignorable="d" d:DesignWidth="1920" d:DesignHeight="720"
+        x:Class="EV_Car_UI.Views.MainWindow"
+        Icon="/Assets/avalonia-logo.ico"
+        Width="1920"
+        Height="720"
+        Title="EV Car UI">
+
+    <Design.DataContext>
+        <vm:MainWindowViewModel/>
+    </Design.DataContext>
+
+    <StackPanel Orientation="Horizontal" Width="1920">
+		
+		<!--The voltages and temperatures-->	
+		<Grid ColumnDefinitions="100,250" RowDefinitions="120,120,120,120,120,120">
+			
+			<Image Grid.Row="0" Grid.Column="0" Source="/Assets/battery.png" Width="64" Height="64" VerticalAlignment="Center"/>
+			<Image Grid.Row="1" Grid.Column="0" Source="/Assets/charging.png" Width="64" VerticalAlignment="Center"/>
+			<Image Grid.Row="2" Grid.Column="0" Source="/Assets/battery.png" Width="64" VerticalAlignment="Center"/>
+			<Image Grid.Row="3" Grid.Column="0" Source="/Assets/thermometer.png" Width="64" VerticalAlignment="Center"/>
+			<Image Grid.Row="4" Grid.Column="0" Source="/Assets/thermometer.png" Width="64" VerticalAlignment="Center"/>
+			<Image Grid.Row="5" Grid.Column="0" Source="/Assets/thermometer.png" Width="64" VerticalAlignment="Center"/>
+			
+			<Label Grid.Row="0" Grid.Column="1" Classes="RawData" Content="{Binding MainBatteryVoltage}"/>
+			<Label Grid.Row="1" Grid.Column="1" Classes="RawData" Content="{Binding BatteryCurrent}"/>
+			<Label Grid.Row="2" Grid.Column="1" Classes="RawData" Content="{Binding CarBatteryVoltage}"/>
+			<Label Grid.Row="3" Grid.Column="1" Classes="RawData" Content="{Binding MotorTemperature}"/>
+			<Label Grid.Row="4" Grid.Column="1" Classes="RawData" Content="{Binding InverterTemperature}"/>
+			<Label Grid.Row="5" Grid.Column="1" Classes="RawData" Content="{Binding BatteryTemperature}"/>
+		</Grid>
+		
+		<Separator Background="#a9a9a9" Width="5"/>
+		
+		<!--The wheel and motor speed-->
+		<StackPanel Width="600">
+			<Label Classes="Speed" FontSize="150" Content="{Binding WheelSpeed}"/>
+			<Label Classes="UnitsLabel" FontSize="60">mph</Label>
+			<Label Classes="Speed" FontSize="80" Content="{Binding MotorSpeed}"/>
+			<Label Classes="UnitsLabel" FontSize="40">rpm</Label>
+		</StackPanel>
+		
+		<!--The throttle and brake-->
+		<!-- TODO: Change this to multiple rectangles-->
+		<Grid ColumnDefinitions="200,200,100" RowDefinitions="60,490,180">
+			<Border Grid.Row="1" Grid.Column="0" BorderBrush="Black" BorderThickness="5" Margin="20, 0">
+				<Image Source="../Assets/progressbar.png" Height="{Binding ThrottleBarHeight}" VerticalAlignment="Bottom" Stretch="None"></Image>
+			</Border>
+			<Border Grid.Row="1" Grid.Column="1" BorderBrush="Black" BorderThickness="5" Margin="20, 0">
+				<Image Source="../Assets/progressbar.png" Height="{Binding BrakeBarHeight}" VerticalAlignment="Bottom" Stretch="None"></Image>
+			</Border>
+			<Label Grid.Row="2" Grid.Column="0" Classes="PedalLabel">Throttle</Label>
+			<Label Grid.Row="2" Grid.Column="1" Classes="PedalLabel">Brake</Label>
+		</Grid>
+		
+		<Separator Background="#a9a9a9" Width="5"/>
+
+		<!--The flags-->
+		<StackPanel Width="400">
+			<Label Classes="StatusLabel">Battery Connector</Label>
+			<ProgressBar Classes="Status" Value="{Binding BatteryConnector}"/>
+			<Label Classes="StatusLabel">Bridge Control</Label>
+			<ProgressBar Classes="Status" Value="{Binding BridgeControl}" />
+			<Label Classes="StatusLabel">Derating</Label>
+			<ProgressBar  Classes="Status" Value="{Binding Derating}" />
+		</StackPanel>
+		
+	</StackPanel>
+	
+	<!-- Allows us to not repeat styling code -->
+	<Window.Styles>
+		<Style Selector="Label.Speed">
+			<Setter Property="HorizontalContentAlignment" Value="Center"/>
+			<Setter Property="VerticalContentAlignment" Value="Bottom"/>
+			<Setter Property="Padding" Value="0,120,0,0"/>
+		</Style>
+		<Style Selector="Label.UnitsLabel">
+			<Setter Property="HorizontalContentAlignment" Value="Center"/>
+			<Setter Property="VerticalContentAlignment" Value="Top"/>
+		</Style>
+		<Style Selector="Label.PedalLabel">
+			<Setter Property="HorizontalContentAlignment" Value="Center"/>
+			<Setter Property="VerticalContentAlignment" Value="Top"/>
+			<Setter Property="FontSize" Value="40"></Setter>
+		</Style>
+		<Style Selector="Label.StatusLabel">
+			<Setter Property="HorizontalContentAlignment" Value="Center"/>
+			<Setter Property="VerticalContentAlignment" Value="Bottom" />
+			<Setter Property="FontSize" Value="40"/> 
+			<Setter Property="Padding" Value="0,60,0,0"/>
+		</Style>
+		<Style Selector="Label.RawData"> <!--For the left side-->
+			<Setter Property="FontSize" Value="30"/>
+			<Setter Property="VerticalContentAlignment" Value="Center"/>
+		</Style>
+		<Style Selector="Rectangle.Pedals">
+			<Setter Property="VerticalAlignment" Value="Bottom"></Setter>
+			<Setter Property="MaxHeight" Value="180"></Setter>
+		</Style>
+		<Style Selector="Rectangle.PedalsUpper">
+			<Setter Property="VerticalAlignment" Value="Bottom"></Setter>
+			<Setter Property="MaxHeight" Value="120"></Setter>
+		</Style>
+		<Style Selector="ProgressBar.Status">
+			<Setter Property="VerticalAlignment" Value="Top"></Setter>
+			<Setter Property="HorizontalAlignment" Value="Center"></Setter>
+			<Setter Property="Orientation" Value="Horizontal"></Setter>
+			<Setter Property="Height" Value="80"></Setter>
+			<Setter Property="Width" Value="15"></Setter>
+			<Setter Property="Background" Value="White"></Setter>
+			<Setter Property="Foreground" Value="Black"></Setter>
+			<Setter Property="Minimum" Value="0"></Setter>
+			<Setter Property="Maximum" Value="100"></Setter>
+			<Setter Property="BorderBrush" Value="Black"></Setter>
+			<Setter Property="BorderThickness" Value="5"></Setter>
+		</Style>
+		<Style Selector="ProgressBar.Pedal">
+			<Setter Property="VerticalAlignment" Value="Bottom"></Setter>
+			<Setter Property="HorizontalAlignment" Value="Center"></Setter>
+			<Setter Property="Orientation" Value="Vertical"></Setter>
+			<Setter Property="Height" Value="480"></Setter>
+			<Setter Property="Width" Value="160"></Setter>
+			<Setter Property="Background" Value="Blue"></Setter>
+			<Setter Property="Foreground" Value="DarkBlue"></Setter>
+			<Setter Property="Minimum" Value="0"></Setter>
+			<Setter Property="Maximum" Value="100"></Setter>
+			<Setter Property="BorderBrush" Value="Black"></Setter>
+			<Setter Property="BorderThickness" Value="2"></Setter>
+		</Style>
+	</Window.Styles>
+</Window>
+

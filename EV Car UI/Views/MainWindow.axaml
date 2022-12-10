@@ -5,7 +5,7 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         mc:Ignorable="d" d:DesignWidth="1920" d:DesignHeight="720"
         x:Class="EV_Car_UI.Views.MainWindow"
-        Icon="/Assets/avalonia-logo.ico"
+        Icon="/Assets/mockup.png"
         Width="1920"
         Height="720"
         Title="EV Car UI">
@@ -14,62 +14,164 @@
         <vm:MainWindowViewModel/>
     </Design.DataContext>
 
-    <StackPanel Orientation="Horizontal" Width="1920">
+	<!--The main holder for all our UI, the stack panel is a panel that will place our objects sequentially and allow them to take 
+		how much ever they need-->
+    <StackPanel Width="1920"
+                Orientation="Horizontal">
 		
-		<!--The voltages and temperatures-->	
-		<Grid ColumnDefinitions="100,250" RowDefinitions="120,120,120,120,120,120">
+		<!--A 6x2 grid to hold the voltages and temperatures. The Classes is a way to not have to repeat styling-->	
+		<Grid 
+			ColumnDefinitions="100,250" 
+			RowDefinitions="120,120,120,120,120,120">
 			
-			<Image Grid.Row="0" Grid.Column="0" Source="/Assets/battery.png" Width="64" Height="64" VerticalAlignment="Center"/>
-			<Image Grid.Row="1" Grid.Column="0" Source="/Assets/charging.png" Width="64" VerticalAlignment="Center"/>
-			<Image Grid.Row="2" Grid.Column="0" Source="/Assets/battery.png" Width="64" VerticalAlignment="Center"/>
-			<Image Grid.Row="3" Grid.Column="0" Source="/Assets/thermometer.png" Width="64" VerticalAlignment="Center"/>
-			<Image Grid.Row="4" Grid.Column="0" Source="/Assets/thermometer.png" Width="64" VerticalAlignment="Center"/>
-			<Image Grid.Row="5" Grid.Column="0" Source="/Assets/thermometer.png" Width="64" VerticalAlignment="Center"/>
+			<Image 
+				Grid.Row="0" 
+				Grid.Column="0" 
+				Source="/Assets/battery.png" 
+				Classes="RawDataImage"/>
+			<Image 
+				Grid.Row="1" 
+				Grid.Column="0" 
+				Source="/Assets/charging.png"
+				Classes="RawDataImage"/>
+			<Image 
+				Grid.Row="2" 
+				Grid.Column="0" 
+				Source="/Assets/battery.png" 
+				Classes="RawDataImage"/>
+			<Image 
+				Grid.Row="3" 
+				Grid.Column="0" 
+				Source="/Assets/thermometer.png" 
+				Classes="RawDataImage"/>
+			<Image 
+				Grid.Row="4" 
+				Grid.Column="0" 
+				Source="/Assets/thermometer.png"
+				Classes="RawDataImage"/>
+			<Image 
+				Grid.Row="5" 
+				Grid.Column="0"
+				Source="/Assets/thermometer.png" 
+				Classes="RawDataImage"/>
 			
-			<Label Grid.Row="0" Grid.Column="1" Classes="RawData" Content="{Binding MainBatteryVoltage}"/>
-			<Label Grid.Row="1" Grid.Column="1" Classes="RawData" Content="{Binding BatteryCurrent}"/>
-			<Label Grid.Row="2" Grid.Column="1" Classes="RawData" Content="{Binding CarBatteryVoltage}"/>
-			<Label Grid.Row="3" Grid.Column="1" Classes="RawData" Content="{Binding MotorTemperature}"/>
-			<Label Grid.Row="4" Grid.Column="1" Classes="RawData" Content="{Binding InverterTemperature}"/>
-			<Label Grid.Row="5" Grid.Column="1" Classes="RawData" Content="{Binding BatteryTemperature}"/>
+			<Label 
+				Grid.Row="0" 
+				Grid.Column="1" 
+				Classes="RawDataText" 
+				Content="{Binding MainBatteryVoltage}"/>
+			<Label 
+				Grid.Row="1" 
+				Grid.Column="1" 
+				Classes="RawDataText" 
+				Content="{Binding BatteryCurrent}"/>
+			<Label 
+				Grid.Row="2" 
+				Grid.Column="1" 
+				Classes="RawDataText" 
+				Content="{Binding CarBatteryVoltage}"/>
+			<Label 
+				Grid.Row="3" 
+				Grid.Column="1" 
+				Classes="RawDataText" 
+				Content="{Binding MotorTemperature}"/>
+			<Label 
+				Grid.Row="4" 
+				Grid.Column="1" 
+				Classes="RawDataText" 
+				Content="{Binding InverterTemperature}"/>
+			<Label 
+			Grid.Row="5" 
+			Grid.Column="1" 
+			Classes="RawDataText" 
+			Content="{Binding BatteryTemperature}"/>
 		</Grid>
 		
+		<!--The grey line as a separator-->
 		<Separator Background="#a9a9a9" Width="5"/>
 		
 		<!--The wheel and motor speed-->
 		<StackPanel Width="600">
-			<Label Classes="Speed" FontSize="150" Content="{Binding WheelSpeed}"/>
-			<Label Classes="UnitsLabel" FontSize="60">mph</Label>
-			<Label Classes="Speed" FontSize="80" Content="{Binding MotorSpeed}"/>
-			<Label Classes="UnitsLabel" FontSize="40">rpm</Label>
+			<Label 
+				Classes="Speed" 
+				FontSize="150" 
+				Content="{Binding WheelSpeed}"/>
+			<Label 
+				Classes="UnitsLabel" 
+				FontSize="60"
+				Content="mph"/>
+			<Label 
+				Classes="Speed" 
+				FontSize="80" 
+				Content="{Binding MotorSpeed}"/>
+			<Label 
+				Classes="UnitsLabel" 
+				FontSize="40"
+				Content="rpm"/>
 		</StackPanel>
 		
 		<!--The throttle and brake-->
-		<!-- TODO: Change this to multiple rectangles-->
 		<Grid ColumnDefinitions="200,200,100" RowDefinitions="60,490,180">
-			<Border Grid.Row="1" Grid.Column="0" BorderBrush="Black" BorderThickness="5" Margin="20, 0">
-				<Image Source="../Assets/progressbar.png" Height="{Binding ThrottleBarHeight}" VerticalAlignment="Bottom" Stretch="None"></Image>
+			<Border 
+				Grid.Row="1" 
+				Grid.Column="0" 
+				BorderBrush="Black" 
+				BorderThickness="5" 
+				Margin="20, 0">
+				<Image 
+					Source="../Assets/progressbar.png" 
+					Height="{Binding ThrottleBarHeight}" 
+					VerticalAlignment="Bottom" 
+					Stretch="None"/>
 			</Border>
-			<Border Grid.Row="1" Grid.Column="1" BorderBrush="Black" BorderThickness="5" Margin="20, 0">
-				<Image Source="../Assets/progressbar.png" Height="{Binding BrakeBarHeight}" VerticalAlignment="Bottom" Stretch="None"></Image>
+			<Border 
+				Grid.Row="1" 
+				Grid.Column="1" 
+				BorderBrush="Black" 
+				BorderThickness="5"
+				Margin="20, 0">
+				<Image 
+					Source="../Assets/progressbar.png" 
+					Height="{Binding BrakeBarHeight}" 
+					VerticalAlignment="Bottom" 
+					Stretch="None"/>
 			</Border>
-			<Label Grid.Row="2" Grid.Column="0" Classes="PedalLabel">Throttle</Label>
-			<Label Grid.Row="2" Grid.Column="1" Classes="PedalLabel">Brake</Label>
+			<Label 
+				Grid.Row="2" 
+				Grid.Column="0" 
+				Classes="PedalLabel"
+				Content="Throttle"/>
+			<Label 
+				Grid.Row="2" 
+				Grid.Column="1" 
+				Classes="PedalLabel"
+				Content="Brake"/>
 		</Grid>
 		
 		<Separator Background="#a9a9a9" Width="5"/>
 
 		<!--The flags-->
 		<StackPanel Width="400">
-			<Label Classes="StatusLabel">Battery Connector</Label>
-			<ProgressBar Classes="Status" Value="{Binding BatteryConnector}"/>
-			<Label Classes="StatusLabel">Bridge Control</Label>
-			<ProgressBar Classes="Status" Value="{Binding BridgeControl}" />
-			<Label Classes="StatusLabel">Derating</Label>
-			<ProgressBar  Classes="Status" Value="{Binding Derating}" />
+			<Label 
+				Classes="StatusLabel"
+				Content="Battery Connector"/>
+			<ProgressBar 
+				Classes="Status" 
+				Value="{Binding BatteryConnector}"/>
+			<Label 
+				Classes="StatusLabel"
+				Content="Bridge Control"/>
+			<ProgressBar 
+				Classes="Status" 
+				Value="{Binding BridgeControl}" />
+			<Label 
+				Classes="StatusLabel"
+				Content="Derating"/>
+			<ProgressBar  
+				Classes="Status" 
+				Value="{Binding Derating}" />
 		</StackPanel>
-		
-	</StackPanel>
+    </StackPanel>
 	
 	<!-- Allows us to not repeat styling code -->
 	<Window.Styles>
@@ -93,9 +195,14 @@
 			<Setter Property="FontSize" Value="40"/> 
 			<Setter Property="Padding" Value="0,60,0,0"/>
 		</Style>
-		<Style Selector="Label.RawData"> <!--For the left side-->
+		<Style Selector="Label.RawDataText"> <!--For the left side-->
 			<Setter Property="FontSize" Value="30"/>
 			<Setter Property="VerticalContentAlignment" Value="Center"/>
+		</Style>
+		<Style Selector="Image.RawDataImage"> <!--For the left side-->
+			<Setter Property="Width" Value="64"/> 
+			<Setter Property="Height" Value="64"/> 
+			<Setter Property="VerticalAlignment" Value="Center"/> 
 		</Style>
 		<Style Selector="Rectangle.Pedals">
 			<Setter Property="VerticalAlignment" Value="Bottom"></Setter>
@@ -117,19 +224,6 @@
 			<Setter Property="Maximum" Value="100"></Setter>
 			<Setter Property="BorderBrush" Value="Black"></Setter>
 			<Setter Property="BorderThickness" Value="5"></Setter>
-		</Style>
-		<Style Selector="ProgressBar.Pedal">
-			<Setter Property="VerticalAlignment" Value="Bottom"></Setter>
-			<Setter Property="HorizontalAlignment" Value="Center"></Setter>
-			<Setter Property="Orientation" Value="Vertical"></Setter>
-			<Setter Property="Height" Value="480"></Setter>
-			<Setter Property="Width" Value="160"></Setter>
-			<Setter Property="Background" Value="Blue"></Setter>
-			<Setter Property="Foreground" Value="DarkBlue"></Setter>
-			<Setter Property="Minimum" Value="0"></Setter>
-			<Setter Property="Maximum" Value="100"></Setter>
-			<Setter Property="BorderBrush" Value="Black"></Setter>
-			<Setter Property="BorderThickness" Value="2"></Setter>
 		</Style>
 	</Window.Styles>
 </Window>

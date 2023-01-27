@@ -39,48 +39,13 @@ public partial class MainWindowViewModel : ViewModelBase
     public double ThrottleBarHeight => ThrottlePercentageValue / 100f * 480f;
     public double BrakeBarHeight => BrakePercentageValue / 100f * 480f;
 
-    public static double Inc = 5;
-    public static int count = 1;
-    public static int counter= 0;
-    
     //for the source generator to find it
     private void RaisePropertyChanged(string name) => IReactiveObjectExtensions.RaisePropertyChanged(this, name);
 
-    static MainWindowViewModel()
+    public MainWindowViewModel()
     {
-        //passing it random data every 2 seconds to see some movement
-        RunInBackground();
-
-        async Task RunInBackground()
-        {
-            var periodicTimer = new PeriodicTimer(TimeSpan.FromMilliseconds(100));
-            while (await periodicTimer.WaitForNextTickAsync())
-            {
-                if (counter < 20)
-                {
-                    counter++;
-                    continue;
-                }
-
-                counter++;
-                Data.SetMainBatteryVoltage(GetRandomFloat(300));
-                Data.SetBatteryCurrent(GetRandomFloat(300));
-                Data.SetCarBatteryVoltage(GetRandomFloat(12));
-                Data.SetMotorTemperature(GetRandomFloat(25));
-                Data.SetInverterTemperature(GetRandomFloat(25));
-                Data.SetBatteryTemperature(GetRandomFloat(25));
-                Data.SetWheelSpeed(GetRandomFloat(60));
-                Data.SetMotorSpeed(GetRandomFloat(5000));
-                Data.SetThrottlePercentage(Inc*count++ % 100);
-                Data.SetBrakePercentage((Inc/2)*count++ % 100);
-                Data.SetStatusDerating(GetRandomBool());
-                Data.SetStatusBatteryConnector(GetRandomBool());
-                Data.SetStatusBridgeControl(GetRandomBool());
-            }
-        }
+        CanBus.Start();
     }
-
-    public static float GetRandomFloat(float num) => num * 3 / 4f + counter/100f * num;
-    public static bool GetRandomBool() => new Random().NextDouble() > 0.5;
+    
 }
 

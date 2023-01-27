@@ -1,8 +1,4 @@
-﻿using System;
-using System.Threading;
-using System.Threading.Tasks;
-
-namespace EV_Car_UI.Models;
+﻿namespace EV_Car_UI.Models;
 
 // a class that stores and handles the data we get from the rest of the car
 public static class Data

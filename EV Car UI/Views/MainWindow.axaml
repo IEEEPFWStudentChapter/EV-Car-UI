@@ -91,7 +91,8 @@
 		<Separator Background="#a9a9a9" Width="5"/>
 		
 		<!--The wheel and motor speed-->
-		<StackPanel Width="600">
+		<StackPanel
+			Width="600">
 			<Label 
 				Classes="Speed" 
 				FontSize="150" 

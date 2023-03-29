@@ -1,9 +1,11 @@
 ﻿namespace EV_Car_UI.Models;
 
-// a class that stores and handles the data we get from the rest of the car
+// A class that handles updating the data we receive from the car
+// Use this class to update the data (see RandomData class) instead of doing it directly
+// When canbus stuff is figured out, do not edit this class, edit CanBus class instead.
 public static class Data
 {
-    //setters for all values in view model
+    // setters for all values in view model
     public static void SetMainBatteryVoltage(float value) => App.MainWindowViewModel.MainBatteryVoltageValue = value;
     public static void SetBatteryCurrent(float value) => App.MainWindowViewModel.BatteryCurrentValue = value;
     public static void SetCarBatteryVoltage(float value) => App.MainWindowViewModel.CarBatteryVoltageValue = value;

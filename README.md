@@ -3,17 +3,16 @@
 ![](https://github.com/Hussain-Aziz/EV-Car-UI/blob/main/EV%20Car%20UI/Assets/UIExample.gif)  
 
  ## How to build (Windows)
-- have .net6 and avalonia installed (see [docs](https://docs.avaloniaui.net/docs/getting-started))
+- have .net6 and avalonia installed (see [avalonia docs](https://docs.avaloniaui.net/docs/getting-started))
 - run the `publish.bat`  
-This will create 2 zips in the output folder next to the .sln, `windows.zip` and `rasberrypi.zip`. The windows zip is for local testing and the rasberrypi zip is for running the app on rasberry pi.
-
-## How to change the publish.bat for different rasberry pi versions
-- 64 bit Rasberry Pi OS: Change the runtime identifier (after the -r) to linux-arm64 (and change all folder references for the copying and the ziping)  
-- 32 bit Rasberry Pi OS: Change the runtime identifier (after the -r) to linux-arm (and change all folder references for the copying and the ziping)
+This will create 4 zips in the output folder, 
+- `windows.zip`: for running on windows
+- `linux.zip`: for running on a VM
+- `rasberrypi-64bit.zip`: for running on rasberry pi with 64 bit OS installed
+- `rasberrypi-32bit.zip`: for running on rasberry pi with 32 bit OS installed
 
 ## How to run on rasberry pi
-- Transfer `output/rasberrypi.zip` to the rasberry pi
-- unzip it in a dir
-- open that dir in terminal
-- run the command `sh run.sh` or `bash run.sh`
-- enjoy
+- Transfer the correct .zip from the output directory to the rasberry pi or go to github and download the latest artifact.
+- unzip the transfered file to a directory and open that directory in a terminal window
+- run the UI by typing `./'EV Car UI'`
+Note: if you transfer the zip from the output folder, you will need to change the mode manually using `chmod +x 'EV Car UI'`. If you get the zip from github artifacts, it should already be an executable.

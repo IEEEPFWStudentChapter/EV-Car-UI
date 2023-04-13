@@ -1,4 +1,4 @@
-﻿using EV_Car_UI.Models;
+﻿using Avalonia.Media;
 using PropertyChanged.SourceGenerator;
 using ReactiveUI;
 
@@ -26,6 +26,7 @@ public partial class MainWindowViewModel : ViewModelBase
      [Notify] private bool _deratingValue;
      [Notify] private bool _batteryConnectorValue;
      [Notify] private bool _bridgeControlValue;
+     [Notify] public double _barHeight = 480f;
     
     // The properties that are binded to the values in the UI.
 
@@ -39,12 +40,11 @@ public partial class MainWindowViewModel : ViewModelBase
     public string BatteryTemperature => $"{BatteryTemperatureValue:0.00} °C";
     public string WheelSpeed => $"{WheelSpeedValue:0.00}";
     public string MotorSpeed => $"{MotorSpeedValue:0.00}";
-    public float BatteryConnector => BatteryConnectorValue ? 100 : 0;
-    public float BridgeControl => BridgeControlValue ? 100 : 0;
-    public float Derating => DeratingValue ? 100 : 0;
-
-    public double ThrottleBarHeight => ThrottlePercentageValue / 100f * 480f;
-    public double BrakeBarHeight => BrakePercentageValue / 100f * 480f;
+    public IBrush BatteryConnector => BatteryConnectorValue ? new SolidColorBrush(Colors.Black) : new SolidColorBrush(Colors.WhiteSmoke);
+    public IBrush BridgeControl => BridgeControlValue ? new SolidColorBrush(Colors.Black) : new SolidColorBrush(Colors.WhiteSmoke);
+    public IBrush Derating => DeratingValue ? new SolidColorBrush(Colors.Black) : new SolidColorBrush(Colors.WhiteSmoke);
+    public double ThrottleBarHeight => ThrottlePercentageValue / 100f * BarHeight;
+    public double BrakeBarHeight => BrakePercentageValue / 100f * BarHeight;
 
     // a function for the source generator to find
     // this will cause the UI to update with new data

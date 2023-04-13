@@ -3,26 +3,31 @@
         xmlns:vm="using:EV_Car_UI.ViewModels"
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-        mc:Ignorable="d" d:DesignWidth="1920" d:DesignHeight="720"
+        mc:Ignorable="d" d:DesignWidth="1920" d:DesignHeight="1080"
         x:Class="EV_Car_UI.Views.MainWindow"
         Icon="/Assets/mockup.png"
-        Width="1920"
-        Height="720"
+        Width="1024"
+        Height="600"
         Title="EV Car UI">
 
-    <Design.DataContext>
+	<!--Add this in to make it full screen no system decorations -->
+	<!--WindowState="FullScreen"-->
+	
+	<Design.DataContext>
         <vm:MainWindowViewModel/>
     </Design.DataContext>
 
-	<!--The main holder for all our UI, the stack panel is a panel that will place our objects sequentially and allow them to take 
-		how much ever they need-->
-    <StackPanel Width="1920"
-                Orientation="Horizontal">
-		
-		<!--A 6x2 grid to hold the voltages and temperatures. The Classes is a way to not have to repeat styling-->	
-		<Grid 
-			ColumnDefinitions="100,250" 
-			RowDefinitions="120,120,120,120,120,120">
+	<!--The main holder for all our UI, the grid will act as a stack panel is a panel that will place our objects sequentially-->
+	<Grid
+		Name="MainGrid"
+	    ColumnDefinitions="0.5*,Auto,0.8*,*,Auto,0.66*"
+	    RowDefinitions="*">
+	    <!--A 6x2 grid to hold the voltages and temperatures. The Classes is a way to not have to repeat styling-->
+	    <Grid
+		    Name="RawDataGrid"
+			Grid.Column="0"
+			ColumnDefinitions="*,2.5*" 
+			RowDefinitions="*,*,*,*,*,*">
 			
 			<Image 
 				Grid.Row="0" 
@@ -88,34 +93,54 @@
 		</Grid>
 		
 		<!--The grey line as a separator-->
-		<Separator Background="#a9a9a9" Width="5"/>
+		<Separator
+			Grid.Column="1"
+			Background="#a9a9a9" 
+			Width="5"/>
 		
 		<!--The wheel and motor speed-->
-		<StackPanel
-			Width="600">
-			<Label 
-				Classes="Speed" 
-				FontSize="150" 
-				Content="{Binding WheelSpeed}"/>
-			<Label 
-				Classes="UnitsLabel" 
-				FontSize="60"
-				Content="mph"/>
-			<Label 
-				Classes="Speed" 
-				FontSize="80" 
-				Content="{Binding MotorSpeed}"/>
-			<Label 
-				Classes="UnitsLabel" 
-				FontSize="40"
-				Content="rpm"/>
-		</StackPanel>
+		<Grid
+			ColumnDefinitions="0.1*, *"
+			Grid.Column="2">
+			<DockPanel
+				Grid.Column="1"
+				Name="SpeedStack">
+				<Label
+					DockPanel.Dock="Top"
+					Name="WheelSpeed"
+					Classes="Speed" 
+					FontSize="180" 
+					Content="{Binding WheelSpeed}"/>
+				<Label 
+					DockPanel.Dock="Top"
+					Name="WheelSpeedUnits"
+					Classes="UnitsLabel"
+					FontSize="80" 
+					Content="mph"/>
+				<Label 
+					DockPanel.Dock="Top"
+					Name="MotorSpeed"
+					Classes="Speed" 
+					FontSize="100" 
+					Content="{Binding MotorSpeed}"/>
+				<Label 
+					DockPanel.Dock="Top"
+					Name="MotorSpeedUnits"
+					Classes="UnitsLabel" 
+					FontSize="50"
+					Content="rpm"/>
+			</DockPanel>
+		</Grid>
 		
 		<!--The throttle and brake-->
-		<Grid ColumnDefinitions="200,200,100" RowDefinitions="60,490,180">
+		<Grid 
+			Name="ThrottleAndBrake"
+			Grid.Column="3"
+			ColumnDefinitions="0.25*,2*,2*,0.25*" 
+			RowDefinitions="*,3.5*,*">
 			<Border 
 				Grid.Row="1" 
-				Grid.Column="0" 
+				Grid.Column="1" 
 				BorderBrush="Black" 
 				BorderThickness="5" 
 				Margin="20, 0">
@@ -127,7 +152,7 @@
 			</Border>
 			<Border 
 				Grid.Row="1" 
-				Grid.Column="1" 
+				Grid.Column="2" 
 				BorderBrush="Black" 
 				BorderThickness="5"
 				Margin="20, 0">
@@ -139,40 +164,53 @@
 			</Border>
 			<Label 
 				Grid.Row="2" 
-				Grid.Column="0" 
+				Grid.Column="1" 
 				Classes="PedalLabel"
 				Content="Throttle"/>
 			<Label 
 				Grid.Row="2" 
-				Grid.Column="1" 
+				Grid.Column="2" 
 				Classes="PedalLabel"
 				Content="Brake"/>
 		</Grid>
 		
-		<Separator Background="#a9a9a9" Width="5"/>
+		<Separator
+			Grid.Column="4"
+			Background="#a9a9a9" 
+			Width="5"/>
 
 		<!--The flags-->
-		<StackPanel Width="400">
-			<Label 
-				Classes="StatusLabel"
-				Content="Battery Connector"/>
-			<ProgressBar 
-				Classes="Status" 
-				Value="{Binding BatteryConnector}"/>
-			<Label 
-				Classes="StatusLabel"
-				Content="Bridge Control"/>
-			<ProgressBar 
-				Classes="Status" 
-				Value="{Binding BridgeControl}" />
-			<Label 
-				Classes="StatusLabel"
-				Content="Derating"/>
-			<ProgressBar  
-				Classes="Status" 
-				Value="{Binding Derating}" />
-		</StackPanel>
-    </StackPanel>
+	    <Grid
+		    Grid.Column="5"
+		    >
+			<StackPanel
+				Name="Flags"
+				VerticalAlignment="Center"
+				Grid.Row="0">
+				<Label 
+					Classes="StatusLabelTop"
+					Content="Battery Connector"/>
+				<Border
+					Background="{Binding BatteryConnector}"
+					Classes="Status">
+				</Border>
+				<Label 
+					Classes="StatusLabel"
+					Content="Bridge Control"/>
+				<Border
+					Background="{Binding BridgeControl}"
+					Classes="Status">
+				</Border>
+				<Label 
+					Classes="StatusLabel"
+					Content="Derating"/>
+				<Border
+					Background="{Binding Derating}"
+					Classes="Status">
+				</Border>
+			</StackPanel>
+	    </Grid>
+    </Grid>
 	
 	<!-- Allows us to not repeat styling code -->
 	<Window.Styles>
@@ -184,47 +222,37 @@
 		<Style Selector="Label.UnitsLabel">
 			<Setter Property="HorizontalContentAlignment" Value="Center"/>
 			<Setter Property="VerticalContentAlignment" Value="Top"/>
+			<Setter Property="FontSize" Value="60"/> 
 		</Style>
 		<Style Selector="Label.PedalLabel">
 			<Setter Property="HorizontalContentAlignment" Value="Center"/>
 			<Setter Property="VerticalContentAlignment" Value="Top"/>
+			<Setter Property="FontSize" Value="60"/> 
+		</Style>
+		<Style Selector="Label.StatusLabelTop">
+			<Setter Property="HorizontalAlignment" Value="Center"></Setter>
 			<Setter Property="FontSize" Value="40"></Setter>
 		</Style>
 		<Style Selector="Label.StatusLabel">
-			<Setter Property="HorizontalContentAlignment" Value="Center"/>
-			<Setter Property="VerticalContentAlignment" Value="Bottom" />
-			<Setter Property="FontSize" Value="40"/> 
-			<Setter Property="Padding" Value="0,60,0,0"/>
+			<Setter Property="HorizontalAlignment" Value="Center"></Setter>
+			<Setter Property="FontSize" Value="40"></Setter>
+			<Setter Property="Padding" Value="0,150,0,0"/>
 		</Style>
 		<Style Selector="Label.RawDataText"> <!--For the left side-->
-			<Setter Property="FontSize" Value="30"/>
+			<Setter Property="HorizontalAlignment" Value="Center"/>
 			<Setter Property="VerticalContentAlignment" Value="Center"/>
+			<Setter Property="FontSize" Value="40"/>
 		</Style>
 		<Style Selector="Image.RawDataImage"> <!--For the left side-->
-			<Setter Property="Width" Value="64"/> 
-			<Setter Property="Height" Value="64"/> 
+			<Setter Property="HorizontalAlignment" Value="Center"/>
 			<Setter Property="VerticalAlignment" Value="Center"/> 
 		</Style>
-		<Style Selector="Rectangle.Pedals">
-			<Setter Property="VerticalAlignment" Value="Bottom"></Setter>
-			<Setter Property="MaxHeight" Value="180"></Setter>
-		</Style>
-		<Style Selector="Rectangle.PedalsUpper">
-			<Setter Property="VerticalAlignment" Value="Bottom"></Setter>
-			<Setter Property="MaxHeight" Value="120"></Setter>
-		</Style>
-		<Style Selector="ProgressBar.Status">
-			<Setter Property="VerticalAlignment" Value="Top"></Setter>
-			<Setter Property="HorizontalAlignment" Value="Center"></Setter>
-			<Setter Property="Orientation" Value="Horizontal"></Setter>
-			<Setter Property="Height" Value="80"></Setter>
-			<Setter Property="Width" Value="15"></Setter>
-			<Setter Property="Background" Value="White"></Setter>
-			<Setter Property="Foreground" Value="Black"></Setter>
-			<Setter Property="Minimum" Value="0"></Setter>
-			<Setter Property="Maximum" Value="100"></Setter>
-			<Setter Property="BorderBrush" Value="Black"></Setter>
-			<Setter Property="BorderThickness" Value="5"></Setter>
+		<Style Selector="Border.Status">
+			<Setter Property="Height" Value="125"/>
+	        <Setter Property="Width" Value="250"/>
+	        <Setter Property="BorderBrush" Value="Black"/>
+	        <Setter Property="CornerRadius" Value="10"/>
+	        <Setter Property="BorderThickness" Value="5"/>
 		</Style>
 	</Window.Styles>
 </Window>

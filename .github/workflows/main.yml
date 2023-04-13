@@ -27,7 +27,9 @@ jobs:
           cd 'EV Car UI'
           dotnet publish -r linux-arm -p:Configuration=Release -p:PublishReadyToRun=true -p:PublishSingleFile=true -p:UseAppHost=true --self-contained true
           cd ..
-          chmod +x './EV Car UI/bin/Release/net6.0/linux-arm/publish/EV Car UI'
+          cp run.sh './EV Car UI/bin/Release/net6.0/linux-arm/publish/'
+          chmod a+x './EV Car UI/bin/Release/net6.0/linux-arm/publish/run.sh'
+          chmod a+x './EV Car UI/bin/Release/net6.0/linux-arm/publish/EV Car UI'
           cd './EV Car UI/bin/Release/net6.0/linux-arm/publish/'
           zip RPi-32bit.zip ./*
       - name: Upload
@@ -57,7 +59,9 @@ jobs:
           cd 'EV Car UI'
           dotnet publish -r linux-arm64 -p:Configuration=Release -p:PublishReadyToRun=true -p:PublishSingleFile=true -p:UseAppHost=true --self-contained true
           cd ..
-          chmod +x './EV Car UI/bin/Release/net6.0/linux-arm64/publish/EV Car UI'
+          cp run.sh './EV Car UI/bin/Release/net6.0/linux-arm64/publish/'
+          chmod a+x './EV Car UI/bin/Release/net6.0/linux-arm64/publish/run.sh'
+          chmod a+x './EV Car UI/bin/Release/net6.0/linux-arm64/publish/EV Car UI'
           cd './EV Car UI/bin/Release/net6.0/linux-arm64/publish/'
           zip RPi-64bit.zip ./*
       - name: Upload
@@ -87,7 +91,9 @@ jobs:
           cd 'EV Car UI'
           dotnet publish -r linux-x64 -p:Configuration=Release -p:PublishReadyToRun=true -p:PublishSingleFile=true -p:UseAppHost=true --self-contained true
           cd ..
-          chmod +x './EV Car UI/bin/Release/net6.0/linux-x64/publish/EV Car UI'
+          cp run.sh './EV Car UI/bin/Release/net6.0/linux-x64/publish/'
+          chmod a+x './EV Car UI/bin/Release/net6.0/linux-x64/publish/run.sh'
+          chmod a+x './EV Car UI/bin/Release/net6.0/linux-x64/publish/EV Car UI'
           cd './EV Car UI/bin/Release/net6.0/linux-x64/publish/'
           zip linux.zip ./*
       - name: Upload

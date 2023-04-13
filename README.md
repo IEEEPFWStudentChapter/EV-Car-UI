@@ -19,13 +19,10 @@ Note: if you transfer the zip from the output folder, you will need to change th
 
 ## How to setup app to run on startup
 The [original source](https://learn.sparkfun.com/tutorials/how-to-run-a-raspberry-pi-program-on-startup/all)
-- Make sure autologin is enabled, do that by going to preferences -> Rasberry Pi Configuration -> System
-- Open a terminal and run `cd /home/user/Desktop/rasberrypi/` to get to the directory of the app
-- Create a shell script called `run.sh` using the command `nano run.sh` and add to it the following lines
-```
-#!/bin/bash
-/home/user/Desktop/rasberrypi/EV\ Car\ UI
-```
+- Create a folder on desktop named `Car UI` and place the `EV Car UI` execuatable, `run.sh`, `libSkiaSharp.so`, and `libHarfBuzzSharp.so` in that folder.
+- Make sure these are set up correctly
+  - autologin is enabled, do that by going to preferences -> Rasberry Pi Configuration -> System.
+  - `run.sh` and `EV Car UI` is executable. This should already be done if downloading from github.
 - Create the directory where autostart looks for .desktop scripts using `mkdir ~/.config/autostart`
 - Create a .desktop file in that directory `nano ~/.config/autostart/EVCarUI.desktop`
 - Add the following lines to that file
@@ -33,7 +30,10 @@ The [original source](https://learn.sparkfun.com/tutorials/how-to-run-a-raspberr
 [Desktop Entry]
 Type=Application
 Name=EVCarUI
-Exec=/bin/sh /home/user/Desktop/rasberrypi/run.sh
+Exec=/bin/sh /home/user/Desktop/Car\ UI/run.sh
 ```
-- Reboot and test if it works
-> Note: replace the `/home/user/Desktop/rasberrypi/` with the path of the app and replace the `/home/user/Desktop/rasberrypi/run.sh` with the correct path of the shell script.  
+- Save the file, reboot and test if it works.  
+
+> Note: The backslash in `Car\ UI` and `EV\ Car\ UI` is used to escape the space. It is done to preserve the literal value of the next character (the space).  
+
+> Note: Replace the `/home/user/Desktop/Car\ UI/` with the path of the app and replace the `/home/user/Desktop/Car\ UI/run.sh` with the correct path of the shell script.  

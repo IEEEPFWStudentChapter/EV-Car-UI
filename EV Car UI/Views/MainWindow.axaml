@@ -6,12 +6,8 @@
         mc:Ignorable="d" d:DesignWidth="1920" d:DesignHeight="1080"
         x:Class="EV_Car_UI.Views.MainWindow"
         Icon="/Assets/mockup.png"
-        Width="1024"
-        Height="600"
+        WindowState="FullScreen"
         Title="EV Car UI">
-
-	<!--Add this in to make it full screen no system decorations -->
-	<!--WindowState="FullScreen"-->
 	
 	<Design.DataContext>
         <vm:MainWindowViewModel/>

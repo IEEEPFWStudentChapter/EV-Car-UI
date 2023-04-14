@@ -80,7 +80,7 @@ public partial class MainWindow : Window
             if (child is Label label)
             {
                 label.FontSize =  widthScaleFactor * DefaultSizes[nameof(SpeedStack) + label.Name];
-                if (!label.Name.Contains("Units"))
+                if (!label.Name!.Contains("Units"))
                 {
                     label.Padding = new Thickness(0,
                         heightScaleFactor * DefaultSizes[nameof(SpeedStack) + nameof(Padding)],

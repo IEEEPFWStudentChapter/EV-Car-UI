@@ -49,6 +49,7 @@ public partial class MainWindowViewModel : ViewModelBase
     // a function for the source generator to find
     // this will cause the UI to update with new data
     private void RaisePropertyChanged(string name) => IReactiveObjectExtensions.RaisePropertyChanged(this, name);
+    private void RaisePropertyChanging(string name) => IReactiveObjectExtensions.RaisePropertyChanging(this, name);
 }
 
 public class ViewModelBase : ReactiveObject {}

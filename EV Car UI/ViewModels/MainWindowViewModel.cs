@@ -38,8 +38,8 @@ public partial class MainWindowViewModel : ViewModelBase
     public string MotorTemperature => $"{MotorTemperatureValue:0.00} °C";
     public string InverterTemperature => $"{InverterTemperatureValue:0.00} °C";
     public string BatteryTemperature => $"{BatteryTemperatureValue:0.00} °C";
-    public string WheelSpeed => $"{WheelSpeedValue:0.00}";
-    public string MotorSpeed => $"{MotorSpeedValue:0.00}";
+    public string WheelSpeed => $"{WheelSpeedValue:0.0}";
+    public string MotorSpeed => $"{MotorSpeedValue:0.0}";
     public IBrush BatteryConnector => BatteryConnectorValue ? new SolidColorBrush(Colors.Black) : new SolidColorBrush(Colors.WhiteSmoke);
     public IBrush BridgeControl => BridgeControlValue ? new SolidColorBrush(Colors.Black) : new SolidColorBrush(Colors.WhiteSmoke);
     public IBrush Derating => DeratingValue ? new SolidColorBrush(Colors.Black) : new SolidColorBrush(Colors.WhiteSmoke);

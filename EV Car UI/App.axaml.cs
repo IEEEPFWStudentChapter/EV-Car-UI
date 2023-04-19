@@ -1,4 +1,5 @@
 using Avalonia;
+using Avalonia.Controls;
 using Avalonia.Controls.ApplicationLifetimes;
 using Avalonia.Data.Core;
 using Avalonia.Data.Core.Plugins;
@@ -15,13 +16,6 @@ public partial class App : Application
     {
         AvaloniaXamlLoader.Load(this);
     }
-    
-    private static MainWindow MainWindow = new ()
-    {
-        DataContext = new MainWindowViewModel(),
-    };
-        
-    public static MainWindowViewModel MainWindowViewModel => (MainWindow.DataContext as MainWindowViewModel)!;
 
     public override void OnFrameworkInitializationCompleted()
     {
@@ -30,7 +24,10 @@ public partial class App : Application
             // Line below is needed to remove Avalonia data validation.
             // Without this line you will get duplicate validations from both Avalonia and CT
             ExpressionObserver.DataValidators.RemoveAll(x => x is DataAnnotationsValidationPlugin);
-            desktop.MainWindow = MainWindow;
+            desktop.MainWindow = new MainWindow
+            {
+                DataContext = new MainWindowViewModel(),
+            };
         }
 
         base.OnFrameworkInitializationCompleted();

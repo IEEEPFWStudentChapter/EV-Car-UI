@@ -1,16 +1,19 @@
-﻿using Avalonia.Media;
+﻿using Avalonia;
+using Avalonia.Media;
+using Avalonia.Platform;
+using EV_Car_UI.Models;
 using PropertyChanged.SourceGenerator;
 using ReactiveUI;
 
 namespace EV_Car_UI.ViewModels;
 
-public partial class MainWindowViewModel : ViewModelBase
+public partial class MainWindowViewModel : ViewModelBase, IUpdateOnReceiveData
 {
     // fields that store the data that is shown on UI
-    
+
     // the [Notify] attribute auto generates code that will call RaisePropertyChanged whenever the field is set. 
     // This is important to do because this function is what upates the UI with new values.
-    
+
     // Note that the source generator will generate the field as a public property that has the same name
     // but without the _ and with the first letter capital
      [Notify] private float _mainBatteryVoltageValue;
@@ -50,6 +53,40 @@ public partial class MainWindowViewModel : ViewModelBase
     // this will cause the UI to update with new data
     private void RaisePropertyChanged(string name) => IReactiveObjectExtensions.RaisePropertyChanged(this, name);
     private void RaisePropertyChanging(string name) => IReactiveObjectExtensions.RaisePropertyChanging(this, name);
+
+
+    private readonly CanBus _canBus;
+    private readonly LoraCommunication? _loraCommunication;
+    
+    public MainWindowViewModel()
+    {
+        _canBus = new CanBus(this);
+
+        // so our windows dev environment doesn't die
+        if (AvaloniaLocator.Current.GetService<IRuntimePlatform>()!.GetRuntimeInfo().OperatingSystem ==
+            OperatingSystemType.Linux)
+        {
+            _loraCommunication = new LoraCommunication(this);
+        }
+    }
+
+    public void Update(TransmissionData data)
+    {
+        // update the data
+        MainBatteryVoltageValue = data.mbV;
+        BatteryCurrentValue = data.bC;
+        CarBatteryVoltageValue = data.cbV;
+        MotorTemperatureValue = data.motTem;
+        InverterTemperatureValue = data.invTem;
+        BatteryTemperatureValue = data.batTem;
+        WheelSpeedValue = data.whelSped;
+        MotorSpeedValue = data.motSpd;
+        ThrottlePercentageValue = data.throt;
+        BrakePercentageValue = data.brak;
+        DeratingValue = data.derat;
+        BatteryConnectorValue = data.batCon;
+        BridgeControlValue = data.bridCon;
+    }
 }
 
 public class ViewModelBase : ReactiveObject {}

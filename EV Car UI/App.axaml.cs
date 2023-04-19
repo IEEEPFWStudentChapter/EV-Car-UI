@@ -14,9 +14,6 @@ public partial class App : Application
     public override void Initialize()
     {
         AvaloniaXamlLoader.Load(this);
-        
-        // start our long running code that will receive data and update the UI with it
-        CanBus.Start();
     }
     
     private static MainWindow MainWindow = new ()

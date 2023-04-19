@@ -4,24 +4,43 @@ using System.Threading.Tasks;
 
 namespace EV_Car_UI.Models;
 
-// The class that will get the data from can bus and update the UI with new data
-public static class CanBus
+/// <summary>
+/// The class that will get the data from can bus and update the UI with new data
+/// </summary>
+public class CanBus : DataReceiver, IUpdateOnReceiveData
 {
-    // Called by us when the program is started
-    // do all canbus receiving stuff here
-    // and when data is received call Data.Set...() to set values in UI
-    public static async void Start()
+    /// <summary>
+    /// Called by us when the program is started do all canbus receiving stuff here
+    /// The IUpdateOnReceiveData will be used to update the app when new data comes
+    /// by calling toUpdate.Update(data); 
+    /// </summary>
+    public CanBus(IUpdateOnReceiveData toUpdate) : base(toUpdate)
     {
-        // passes random data every 1/2 seconds
-        await new RandomData().RepeatSendRandomData();
+        // passes random data this every 2 seconds
+        // to simulate receiving data from canbus
+        Task.Run(()=> new RandomData(this).RepeatSendRandomData());
     }
+
+    /// <summary>
+    /// This function exists because of the RandomData class. When we get an update
+    /// from there, we act as if we got it from the canbus so we call receive data
+    /// hence we call that
+    /// </summary>
+    public void Update(TransmissionData data) => OnNewDataReceived(data);
 }
 
-// passes in random data
-// Remove it when actual data comes.
-// Can serve as an example on how to update the UI when new data comes
-public class RandomData
+/// <summary>
+/// A class that passes in random data
+/// Serve as an example on how to update the app when new data comes
+/// In this case the received data is data from the random calls
+/// </summary>
+public class RandomData : DataReceiver
 {
+    /// <summary>
+    /// The IUpdateOnReceiveData will be used to update the data when new data comes
+    /// </summary>
+    public RandomData(IUpdateOnReceiveData toUpdate) : base(toUpdate) { }
+    
     private readonly double Increment = 5;
     private readonly int loopsToWaitBeforeStarting = 10;
     private int loopsCompleted = 0;
@@ -32,30 +51,31 @@ public class RandomData
     // instead of GetRandom, use actual data
     public async Task RepeatSendRandomData()
     {
-        var periodicTimer = new PeriodicTimer(TimeSpan.FromMilliseconds(500));
+        var periodicTimer = new PeriodicTimer(TimeSpan.FromMilliseconds(2000));
         while (await periodicTimer.WaitForNextTickAsync())
         {
-            // waits for 5 seconds before starting putting in random data
-            if (loopsCompleted < 10)
+            // waits for 2 seconds before starting putting in random data
+            if (loopsCompleted < 1)
             {
                 loopsCompleted++;
                 continue;
             }
 
             loopsCompleted++;
-            Data.SetMainBatteryVoltage(GetRandomFloat(300));
-            Data.SetBatteryCurrent(GetRandomFloat(300));
-            Data.SetCarBatteryVoltage(GetRandomFloat(12));
-            Data.SetMotorTemperature(GetRandomFloat(25));
-            Data.SetInverterTemperature(GetRandomFloat(25));
-            Data.SetBatteryTemperature(GetRandomFloat(25));
-            Data.SetWheelSpeed(GetRandomFloat(60));
-            Data.SetMotorSpeed(GetRandomFloat(5000));
-            Data.SetThrottlePercentage(Increment*(loopsCompleted - loopsToWaitBeforeStarting) % 100);
-            Data.SetBrakePercentage(Increment*(loopsCompleted - loopsToWaitBeforeStarting) % 100);
-            Data.SetStatusDerating(GetRandomBool());
-            Data.SetStatusBatteryConnector(GetRandomBool());
-            Data.SetStatusBridgeControl(GetRandomBool());
+            OnNewDataReceived(new TransmissionData(
+                    GetRandomFloat(300), 
+                    GetRandomFloat(300),
+                    GetRandomFloat(12),
+                    GetRandomFloat(25),
+                    GetRandomFloat(25),
+                    GetRandomFloat(25),
+                    GetRandomFloat(60),
+                    GetRandomFloat(5000),
+                    Increment * (loopsCompleted - loopsToWaitBeforeStarting) % 100,
+                    Increment * (loopsCompleted - loopsToWaitBeforeStarting) % 100,
+                    GetRandomBool(),
+                    GetRandomBool(),
+                    GetRandomBool()));
         }
     }
 }

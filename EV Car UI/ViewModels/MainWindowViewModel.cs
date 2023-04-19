@@ -29,7 +29,11 @@ public partial class MainWindowViewModel : ViewModelBase, IUpdateOnReceiveData
      [Notify] private bool _deratingValue;
      [Notify] private bool _batteryConnectorValue;
      [Notify] private bool _bridgeControlValue;
-     [Notify] public double _barHeight = 480f;
+     
+     [Notify] private double _barHeight = 480f;
+     
+     private readonly IBrush BlackColor = new SolidColorBrush(Colors.Black);
+     private readonly IBrush WhiteColor = new SolidColorBrush(Colors.WhiteSmoke);
     
     // The properties that are binded to the values in the UI.
 
@@ -43,9 +47,9 @@ public partial class MainWindowViewModel : ViewModelBase, IUpdateOnReceiveData
     public string BatteryTemperature => $"{BatteryTemperatureValue:0.00} °C";
     public string WheelSpeed => $"{WheelSpeedValue:0.0}";
     public string MotorSpeed => $"{MotorSpeedValue:0.0}";
-    public IBrush BatteryConnector => BatteryConnectorValue ? new SolidColorBrush(Colors.Black) : new SolidColorBrush(Colors.WhiteSmoke);
-    public IBrush BridgeControl => BridgeControlValue ? new SolidColorBrush(Colors.Black) : new SolidColorBrush(Colors.WhiteSmoke);
-    public IBrush Derating => DeratingValue ? new SolidColorBrush(Colors.Black) : new SolidColorBrush(Colors.WhiteSmoke);
+    public IBrush BatteryConnector => BatteryConnectorValue ? BlackColor : WhiteColor;
+    public IBrush BridgeControl => BridgeControlValue ? BlackColor : WhiteColor;
+    public IBrush Derating => DeratingValue ? BlackColor : WhiteColor;
     public double ThrottleBarHeight => ThrottlePercentageValue / 100f * BarHeight;
     public double BrakeBarHeight => BrakePercentageValue / 100f * BarHeight;
 

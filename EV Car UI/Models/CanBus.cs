@@ -42,7 +42,7 @@ public class RandomData : DataReceiver
     public RandomData(IUpdateOnReceiveData toUpdate) : base(toUpdate) { }
     
     private readonly double Increment = 5;
-    private readonly int loopsToWaitBeforeStarting = 10;
+    private readonly int loopsToWaitBeforeStarting = 1;
     private int loopsCompleted = 0;
     private float GetRandomFloat(float num) => num * 3 / 4f + loopsCompleted/100f * num;
     private bool GetRandomBool() => new Random().NextDouble() > 0.5;
@@ -55,7 +55,7 @@ public class RandomData : DataReceiver
         while (await periodicTimer.WaitForNextTickAsync())
         {
             // waits for 2 seconds before starting putting in random data
-            if (loopsCompleted < 1)
+            if (loopsCompleted < loopsToWaitBeforeStarting)
             {
                 loopsCompleted++;
                 continue;

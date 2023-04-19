@@ -7,15 +7,21 @@ namespace EV_Car_UI.Models;
 /// <summary>
 /// The class that will get the data from can bus and update the UI with new data
 /// </summary>
-public class CanBus : DataReceiver, IUpdateOnReceiveData
+public class CanBus : IDataReceiver, IUpdateOnReceiveData
 {
+    /// <summary>
+    /// The interface that will be updated when new data is received
+    /// </summary>
+    public IUpdateOnReceiveData _toUpdate { get; init; }
+    
     /// <summary>
     /// Called by us when the program is started do all canbus receiving stuff here
     /// The IUpdateOnReceiveData will be used to update the app when new data comes
     /// by calling toUpdate.Update(data); 
     /// </summary>
-    public CanBus(IUpdateOnReceiveData toUpdate) : base(toUpdate)
+    public CanBus(IUpdateOnReceiveData toUpdate)
     {
+        _toUpdate = toUpdate;
         // passes random data this every 2 seconds
         // to simulate receiving data from canbus
         Task.Run(()=> new RandomData(this).RepeatSendRandomData());
@@ -27,6 +33,12 @@ public class CanBus : DataReceiver, IUpdateOnReceiveData
     /// hence we call that
     /// </summary>
     public void Update(TransmissionData data) => OnNewDataReceived(data);
+    
+    /// <summary>
+    /// A function to be called when we data is received.
+    /// For now just updates the interface that wants to be updated (i.e the MainWindowViewModel)
+    /// </summary>
+    public void OnNewDataReceived(TransmissionData data) => _toUpdate.Update(data);
 }
 
 /// <summary>
@@ -34,12 +46,17 @@ public class CanBus : DataReceiver, IUpdateOnReceiveData
 /// Serve as an example on how to update the app when new data comes
 /// In this case the received data is data from the random calls
 /// </summary>
-public class RandomData : DataReceiver
+public class RandomData : IDataReceiver
 {
     /// <summary>
     /// The IUpdateOnReceiveData will be used to update the data when new data comes
     /// </summary>
-    public RandomData(IUpdateOnReceiveData toUpdate) : base(toUpdate) { }
+    public RandomData(IUpdateOnReceiveData toUpdate)
+    {
+        _toUpdate = toUpdate;
+    }
+
+    public IUpdateOnReceiveData _toUpdate { get; init; }
     
     private readonly double Increment = 5;
     private readonly int loopsToWaitBeforeStarting = 1;
@@ -78,4 +95,6 @@ public class RandomData : DataReceiver
                     GetRandomBool()));
         }
     }
+    public void OnNewDataReceived(TransmissionData data) => _toUpdate.Update(data);
+    
 }

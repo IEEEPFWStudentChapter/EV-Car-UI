@@ -5,5 +5,8 @@
 /// </summary>
 public interface IDataSender
 {
+    /// <summary>
+    /// The function that will be called to send data
+    /// </summary>
     void SendData(TransmissionData data);
 }

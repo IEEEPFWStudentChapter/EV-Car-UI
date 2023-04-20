@@ -11,7 +11,8 @@ public interface IDataReceiver
     protected IUpdateOnReceiveData _toUpdate { get; init; }
 
     /// <summary>
-    /// A function to be called when we data is received
+    /// A function to be called when we data is received. Normally will just call _toUpdate.Update(data)
+    /// but can do other things such as close connections or give a reply if needed
     /// </summary>
     protected void OnNewDataReceived(TransmissionData data);
     

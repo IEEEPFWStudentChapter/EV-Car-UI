@@ -1,9 +1,11 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Diagnostics;
 using Avalonia;
 using Avalonia.Media;
 using Avalonia.Platform;
 using EV_Car_UI.Models;
+using Newtonsoft.Json;
 using PropertyChanged.SourceGenerator;
 using ReactiveUI;
 
@@ -26,13 +28,13 @@ public partial class MainWindowViewModel : ViewModelBase, IUpdateOnReceiveData
      [Notify] private float _batteryTemperatureValue;
      [Notify] private float _wheelSpeedValue;
      [Notify] private float _motorSpeedValue;
-     [Notify] private double _throttlePercentageValue;
-     [Notify] private double _brakePercentageValue;
+     [Notify] private float _throttlePercentageValue;
+     [Notify] private float _brakePercentageValue;
      [Notify] private bool _deratingValue;
      [Notify] private bool _batteryConnectorValue;
      [Notify] private bool _bridgeControlValue;
      
-     [Notify] private double _barHeight = 480f;
+     [Notify] private float _barHeight = 480f;
      
      private readonly IBrush BlackColor = new SolidColorBrush(Colors.Black);
      private readonly IBrush WhiteColor = new SolidColorBrush(Colors.WhiteSmoke);
@@ -52,8 +54,8 @@ public partial class MainWindowViewModel : ViewModelBase, IUpdateOnReceiveData
     public IBrush BatteryConnector => BatteryConnectorValue ? BlackColor : WhiteColor;
     public IBrush BridgeControl => BridgeControlValue ? BlackColor : WhiteColor;
     public IBrush Derating => DeratingValue ? BlackColor : WhiteColor;
-    public double ThrottleBarHeight => ThrottlePercentageValue / 100f * BarHeight;
-    public double BrakeBarHeight => BrakePercentageValue / 100f * BarHeight;
+    public float ThrottleBarHeight => ThrottlePercentageValue / 100f * BarHeight;
+    public float BrakeBarHeight => BrakePercentageValue / 100f * BarHeight;
 
     // a function for the source generator to find
     // this will cause the UI to update with new data
@@ -80,21 +82,22 @@ public partial class MainWindowViewModel : ViewModelBase, IUpdateOnReceiveData
     public void Update(TransmissionData data)
     {
         // update the data
-        MainBatteryVoltageValue = data.mbV;
-        BatteryCurrentValue = data.bC;
-        CarBatteryVoltageValue = data.cbV;
-        MotorTemperatureValue = data.motTem;
-        InverterTemperatureValue = data.invTem;
-        BatteryTemperatureValue = data.batTem;
-        WheelSpeedValue = data.whelSped;
-        MotorSpeedValue = data.motSpd;
-        ThrottlePercentageValue = data.throt;
-        BrakePercentageValue = data.brak;
-        DeratingValue = data.derat;
-        BatteryConnectorValue = data.batCon;
-        BridgeControlValue = data.bridCon;
-
+        MainBatteryVoltageValue = data.mainBatteryVoltage;
+        BatteryCurrentValue = data.batteryCurrent;
+        CarBatteryVoltageValue = data.carBatteryVoltage;
+        MotorTemperatureValue = data.motorTemperature;
+        InverterTemperatureValue = data.inverterTemperature;
+        BatteryTemperatureValue = data.batteryTemperature;
+        WheelSpeedValue = data.wheelSpeed;
+        MotorSpeedValue = data.motorSpeed;
+        ThrottlePercentageValue = data.throttlePercentage;
+        BrakePercentageValue = data.brakePercentage;
+        DeratingValue = data.derating;
+        BatteryConnectorValue = data.batteryConnector;
+        BridgeControlValue = data.bridgeControl;
+        
         Trace.WriteLine($"Updated data now sending to LoRa {DateTime.Now}");
+        
         _loraCommunication?.SendData(data);
     }
 }

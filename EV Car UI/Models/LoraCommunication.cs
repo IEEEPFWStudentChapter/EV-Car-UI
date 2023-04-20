@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Diagnostics;
 using System.IO;
 using System.Net.Sockets;
@@ -34,7 +35,7 @@ public class LoraCommunication : IDataReceiver, IDataSender
         _toUpdate = toUpdate;
         
         Trace.WriteLine("Setting up socket");
-        _senderSocket = new Socket(AddressFamily.Unix, SocketType.Dgram, ProtocolType.Udp);
+        _senderSocket = new Socket(AddressFamily.Unix, SocketType.Dgram, ProtocolType.Unspecified);
         
         RegisterSenderSocket();
     }
@@ -75,9 +76,26 @@ public class LoraCommunication : IDataReceiver, IDataSender
             Trace.WriteLine($"Unable to send data because of no connection {DateTime.Now}");
             return;
         }
-        string serializedData = JsonConvert.SerializeObject(data);
-        byte[] byteData = System.Text.Encoding.ASCII.GetBytes(serializedData);
-        _senderSocket.SendTo(byteData, new UnixDomainSocketEndPoint("/run/e32.data"));
+        List<byte> byteData = new List<byte>();
+        
+        byteData.AddRange(BitConverter.GetBytes(data.mainBatteryVoltage));
+        byteData.AddRange(BitConverter.GetBytes(data.batteryCurrent));
+        byteData.AddRange(BitConverter.GetBytes(data.carBatteryVoltage));
+        byteData.AddRange(BitConverter.GetBytes(data.motorTemperature));
+        byteData.AddRange(BitConverter.GetBytes(data.inverterTemperature));
+        byteData.AddRange(BitConverter.GetBytes(data.batteryTemperature));
+        byteData.AddRange(BitConverter.GetBytes(data.wheelSpeed));
+        byteData.AddRange(BitConverter.GetBytes(data.motorSpeed));
+        byteData.AddRange(BitConverter.GetBytes(data.throttlePercentage));
+        byteData.AddRange(BitConverter.GetBytes(data.brakePercentage));
+        byteData.AddRange(BitConverter.GetBytes(data.derating));
+        byteData.AddRange(BitConverter.GetBytes(data.batteryConnector));
+        byteData.AddRange(BitConverter.GetBytes(data.bridgeControl));
+        
+        //send 13 pieces of data with 10 floats. rest will be considered bools
+        byteData.Insert(0, 13);
+        byteData.Insert(1, 10);
+        _senderSocket.SendTo(byteData.ToArray(), new UnixDomainSocketEndPoint("/run/e32.data"));
         Trace.WriteLine($"Sent data {DateTime.Now}");
     }
     

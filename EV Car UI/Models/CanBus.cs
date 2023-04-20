@@ -88,8 +88,8 @@ public class RandomData : IDataReceiver
                     GetRandomFloat(25),
                     GetRandomFloat(60),
                     GetRandomFloat(5000),
-                    Increment * (loopsCompleted - loopsToWaitBeforeStarting) % 100,
-                    Increment * (loopsCompleted - loopsToWaitBeforeStarting) % 100,
+                    (float) Increment * (loopsCompleted - loopsToWaitBeforeStarting) % 100,
+                    (float) Increment * (loopsCompleted - loopsToWaitBeforeStarting) % 100,
                     GetRandomBool(),
                     GetRandomBool(),
                     GetRandomBool()));

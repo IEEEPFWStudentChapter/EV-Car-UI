@@ -103,8 +103,8 @@ public partial class MainWindow : Window
             }
         }
         
-        (DataContext as MainWindowViewModel)!.BarHeight = ThrottleAndBrake.Bounds.Height / IdealHeights[nameof(ThrottleAndBrake)] *
-                                                          DefaultSizes[nameof(ThrottleAndBrake) + nameof(Height)];
+        (DataContext as MainWindowViewModel)!.BarHeight = (float) (ThrottleAndBrake.Bounds.Height / IdealHeights[nameof(ThrottleAndBrake)] *
+                                                          DefaultSizes[nameof(ThrottleAndBrake) + nameof(Height)]);
         
         foreach (var child in Flags.Children)
         {

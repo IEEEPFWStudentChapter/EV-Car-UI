@@ -8,17 +8,17 @@ namespace EV_Car_UI.Models;
 /// </summary>
 [Serializable]
 public record TransmissionData(
-    float mbV,           //main battery voltage
-    float bC,            //battery current
-    float cbV,           //car battery voltage
-    float motTem,        //motor temperature
-    float invTem,        //inverter temperature
-    float batTem,        //battery temperature
-    float whelSped,      //wheel speed
-    float motSpd,        //motor speed 
-    double throt,        //throttle
-    double brak,         //brake
-    bool derat,          //derating
-    bool batCon,         //battery connector
-    bool bridCon         //bridge control
+    float mainBatteryVoltage,
+    float batteryCurrent,
+    float carBatteryVoltage,
+    float motorTemperature,
+    float inverterTemperature,
+    float batteryTemperature,
+    float wheelSpeed,
+    float motorSpeed,
+    float throttlePercentage,
+    float brakePercentage,
+    bool  derating,
+    bool  batteryConnector,
+    bool  bridgeControl
     );

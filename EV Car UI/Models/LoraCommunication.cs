@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Diagnostics;
 using System.IO;
 using System.Net.Sockets;
 using Newtonsoft.Json;
@@ -25,11 +26,14 @@ public class LoraCommunication : IDataReceiver, IDataSender
     /// The socket we will use to receive from the Lora module
     /// </summary>
     private readonly Socket _receiverSocket;
+
+    private bool _isConnected = false;
     
     public LoraCommunication(IUpdateOnReceiveData toUpdate)
     {
         _toUpdate = toUpdate;
         
+        Trace.WriteLine("Setting up socket");
         _senderSocket = new Socket(AddressFamily.Unix, SocketType.Dgram, ProtocolType.Udp);
         
         RegisterSenderSocket();
@@ -40,12 +44,25 @@ public class LoraCommunication : IDataReceiver, IDataSender
         var senderSocketLocation =
             Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.UserProfile), "e32.tx.data");
 
+        Trace.WriteLine("socket location: " + senderSocketLocation);
+        
         if (File.Exists(senderSocketLocation))
         {
             File.Delete(senderSocketLocation);
         }
 
-        _senderSocket.Bind(new UnixDomainSocketEndPoint(senderSocketLocation));
+        Trace.WriteLine("binding to socket");
+        try
+        {
+            _senderSocket.Bind(new UnixDomainSocketEndPoint(senderSocketLocation));
+        }
+        catch (Exception e)
+        {
+            Trace.TraceError("Failed to bind to socket: " + e);
+        }
+
+        Trace.WriteLine("successfully binded up socket");
+        _isConnected = true;
     }
 
     /// <summary>
@@ -53,9 +70,15 @@ public class LoraCommunication : IDataReceiver, IDataSender
     /// </summary>
     public void SendData(TransmissionData data)
     {
+        if (!_isConnected)
+        {
+            Trace.WriteLine($"Unable to send data because of no connection {DateTime.Now}");
+            return;
+        }
         string serializedData = JsonConvert.SerializeObject(data);
         byte[] byteData = System.Text.Encoding.ASCII.GetBytes(serializedData);
         _senderSocket.SendTo(byteData, new UnixDomainSocketEndPoint("/run/e32.data"));
+        Trace.WriteLine($"Sent data {DateTime.Now}");
     }
     
     /// <summary>

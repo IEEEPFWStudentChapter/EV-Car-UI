@@ -1,4 +1,6 @@
-﻿using Avalonia;
+﻿using System;
+using System.Diagnostics;
+using Avalonia;
 using Avalonia.Media;
 using Avalonia.Platform;
 using EV_Car_UI.Models;
@@ -70,6 +72,7 @@ public partial class MainWindowViewModel : ViewModelBase, IUpdateOnReceiveData
         if (AvaloniaLocator.Current.GetService<IRuntimePlatform>()!.GetRuntimeInfo().OperatingSystem ==
             OperatingSystemType.Linux)
         {
+            Trace.WriteLine("Starting Lora");
             _loraCommunication = new LoraCommunication(this);
         }
     }
@@ -90,6 +93,9 @@ public partial class MainWindowViewModel : ViewModelBase, IUpdateOnReceiveData
         DeratingValue = data.derat;
         BatteryConnectorValue = data.batCon;
         BridgeControlValue = data.bridCon;
+
+        Trace.WriteLine($"Updated data now sending to LoRa {DateTime.Now}");
+        _loraCommunication?.SendData(data);
     }
 }
 

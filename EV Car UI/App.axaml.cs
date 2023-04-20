@@ -1,3 +1,4 @@
+using System.Diagnostics;
 using Avalonia;
 using Avalonia.Controls;
 using Avalonia.Controls.ApplicationLifetimes;
@@ -27,6 +28,11 @@ public partial class App : Application
             desktop.MainWindow = new MainWindow
             {
                 DataContext = new MainWindowViewModel(),
+            };
+
+            desktop.ShutdownRequested += (_, _) =>
+            {
+                Trace.Close();
             };
         }
 

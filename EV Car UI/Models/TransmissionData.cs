@@ -13,11 +13,11 @@ public record TransmissionData(
     float carBatteryVoltage,
     float motorTemperature,
     float inverterTemperature,
-    float batteryTemperature,
-    float wheelSpeed,
-    float motorSpeed,
-    float throttlePercentage,
-    float brakePercentage,
+    float batteryTemperature,  // 
+    float wheelSpeed,          // calculated
+    float motorSpeed,          // 14 bits
+    float throttlePercentage,  // 7 bits
+    float brakePercentage,     // 7 bits
     bool  derating,
     bool  batteryConnector,
     bool  bridgeControl

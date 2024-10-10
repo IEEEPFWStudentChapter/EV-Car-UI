@@ -2,13 +2,15 @@
 #/home/user/Desktop/Car\ UI/EV\ Car\ UI
 pi_ip='10.42.0.69'
 piname='carTest'
+projname='CanTest'
 
-cd 'EV Car UI'
-dotnet build -r linux-arm64 --self-contained
+#ccd 'CanTest'
+dotnet build $projname -r linux-arm64 --self-contained
 if [ $? -ne 0 ]; then
     echo 'build failed'
     exit
 fi
+cd $projname
 
 ping -c 1 $pi_ip
 if [ $? -ne 0 ]; then

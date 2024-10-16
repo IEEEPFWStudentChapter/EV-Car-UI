@@ -71,12 +71,12 @@ public partial class MainWindowViewModel : ViewModelBase, IUpdateOnReceiveData
         _canBus = new CanBus(this);
 
         // so our windows dev environment doesn't die
-        if (AvaloniaLocator.Current.GetService<IRuntimePlatform>()!.GetRuntimeInfo().OperatingSystem ==
+        /*if (AvaloniaLocator.Current.GetService<IRuntimePlatform>()!.GetRuntimeInfo().OperatingSystem ==
             OperatingSystemType.Linux)
         {
             Trace.WriteLine("Starting Lora");
             _loraCommunication = new LoraCommunication(this);
-        }
+        }*/
     }
 
     public void Update(TransmissionData data)

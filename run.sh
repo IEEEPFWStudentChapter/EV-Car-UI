@@ -2,7 +2,7 @@
 #/home/user/Desktop/Car\ UI/EV\ Car\ UI
 pi_ip='10.42.0.69'
 piname='carTest'
-projname='CanTest'
+projname='EVCarUI'  #'CanTest'
 
 #ccd 'CanTest'
 dotnet build $projname -r linux-arm64 --self-contained
@@ -25,7 +25,7 @@ ssh ${piname}\@$pi_ip <<EOF
     rm -r Desktop/ui/*
 EOF
 
-scp -r bin/Debug/net6.0/linux-arm64  ${piname}\@$pi_ip:Desktop/ui
+scp -r bin/Debug/net6.0/  ${piname}\@$pi_ip:Desktop/ui
 ssh -X ${piname}\@$pi_ip <<EOF
     pkill 'EV Car UI'
     ./Desktop/runUI.sh

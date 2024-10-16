@@ -1,7 +1,7 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "EV Car UI", "EV Car UI\EV Car UI.csproj", "{1DC2ED90-20AB-4168-AA0F-090984FD8627}"
-EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "EVCarUI", "EVCarUI\EVCarUI.csproj", "{1DC2ED90-20AB-4168-AA0F-090984FD8627}"
+EndProjec
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU

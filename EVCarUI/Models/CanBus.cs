@@ -70,7 +70,6 @@ public class CanData : IDataReceiver
             while(true) 
             {
                 TransmissionData data = ReceivePacket(socket);
-            
                 OnNewDataReceived(data);
             }
 
@@ -85,15 +84,12 @@ public class CanData : IDataReceiver
         while(frame1.CanId != 1)
         {
             socket.Read(out frame1);
-            Console.WriteLine("!!!"+frame1.ToString());    
         }
-        Console.WriteLine("Frame1"+frame1.ToString());
 
         while(frame2.CanId != 2)
         {
             socket.Read(out frame2);
         }
-        Console.WriteLine("Frame2"+frame1.ToString());
 
         // I could set up nice code that you just configure stuff   
         // but I will not.

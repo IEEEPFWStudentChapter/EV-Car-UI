@@ -1,0 +1,14 @@
+Opening App at 9/13/2024 9:04:18PM
+LogHost: Initializing to normal mode (.cctor)
+Starting Lora
+Setting up socket
+socket location: /home/mason/e32.tx.data
+binding to socket
+successfully binded up socket
+StatusLabelTop
+StatusLabel
+StatusLabel
+StatusLabelTop
+StatusLabel
+StatusLabel
+Updated data now sending to LoRa 9/13/2024 9:04:24PM

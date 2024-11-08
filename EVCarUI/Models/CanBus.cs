@@ -70,6 +70,7 @@ public class CanData : IDataReceiver
             while(true) 
             {
                 TransmissionData data = ReceivePacket(socket);
+            
                 OnNewDataReceived(data);
             }
 
@@ -84,12 +85,15 @@ public class CanData : IDataReceiver
         while(frame1.CanId != 1)
         {
             socket.Read(out frame1);
+            Console.WriteLine("!!!"+frame1.ToString());    
         }
+        Console.WriteLine("Frame1"+frame1.ToString());
 
-        while(frame2.CanId != 2)
+        /*while(frame2.CanId != 2)
         {
             socket.Read(out frame2);
-        }
+        }*/
+        //Console.WriteLine("Frame2"+frame1.ToString());
 
         // I could set up nice code that you just configure stuff   
         // but I will not.
@@ -97,8 +101,8 @@ public class CanData : IDataReceiver
 
         // what wonderfully awful code. Indeed.
         TransmissionData toReturn = new TransmissionData(){
-            mainBatteryVoltage = (((short)frame1.Data[0]) + ((short)frame1.Data[1])<<16)/10.0f,
-            batteryCurrent = (((short)frame1.Data[2]) + ((short)frame1.Data[3])<<16)/10.0f,
+            mainBatteryVoltage =(BitConverter.ToInt16(frame1.Data, 0))/10.0f,
+            batteryCurrent = (BitConverter.ToInt16(frame1.Data, 2))/10.0f,
             carBatteryVoltage = frame1.Data[4]/10.0f
         };
 

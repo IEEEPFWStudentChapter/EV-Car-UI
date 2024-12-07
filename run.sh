@@ -27,6 +27,6 @@ EOF
 
 scp -r bin/Debug/net6.0/  ${piname}\@$pi_ip:Desktop/ui
 ssh -X ${piname}\@$pi_ip <<EOF
-    pkill 'EV Car UI'
+    pkill 'EVCarUI'
     ./Desktop/runUI.sh
 EOF

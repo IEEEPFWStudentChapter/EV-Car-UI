@@ -60,11 +60,12 @@ public class CanData : IDataReceiver
 
     public async Task ReceiveData()
     {
-        Console.WriteLine("HHHHHHEEEEOBERFHROEHREHREGH");
+        
         // I'm not incredibly familiar with asyncronous code so if this is dumb, then...
         // Uh, I guess I wouldn't be surprised.
 
         CanNetworkInterface can0 = CanNetworkInterface.GetAllInterfaces(true).First();
+        
         using (RawCanSocket socket = new())
         {
 
@@ -92,17 +93,21 @@ public class CanData : IDataReceiver
         CanFrame?[] frames = new CanFrame?[length];
 
         // the canID's we're currently using
-        byte[] ids = new byte[]{1,2,3,4};
+        uint[] ids = new uint[]{1,2,3,4};
 
         CanFrame input = new();
-        while(frames.Contains(null))
+        int received = 0;
+        while(received<length)
         {
             socket.Read(out input);
             Console.WriteLine("Got Can Frame with ID: "+input.CanId);
-            int index = Array.IndexOf(ids, input.CanId);
-            if(index != -1)
+            //int index = Array.IndexOf(ids, input.CanId);
+            int index = ids.IndexOf(input.CanId);
+            if(index != -1 && frames[index]==null)
             {
                 frames[index]=input;
+                received++;
+                Console.WriteLine(received);
             }
         }
 
@@ -112,7 +117,7 @@ public class CanData : IDataReceiver
         Dictionary<int, CanFrame>toReturn = new();
         for(int i = 0; i<length; i++)
         {   
-            toReturn[ids[i]] = (CanFrame)frames[i]!;
+            toReturn[(int)ids[i]] = (CanFrame)frames[i]!;
         }
 
         return toReturn;

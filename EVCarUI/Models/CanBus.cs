@@ -1,8 +1,9 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
-
+using DynamicData;
 using SocketCANSharp;
 using SocketCANSharp.Network;
 
@@ -59,6 +60,7 @@ public class CanData : IDataReceiver
 
     public async Task ReceiveData()
     {
+        Console.WriteLine("HHHHHHEEEEOBERFHROEHREHREGH");
         // I'm not incredibly familiar with asyncronous code so if this is dumb, then...
         // Uh, I guess I wouldn't be surprised.
 
@@ -78,56 +80,73 @@ public class CanData : IDataReceiver
         }
     }
 
+    /// <summary>
+    /// Returns a dictionary keyed by the canID. When adding a frame, add it to the ids array.
+    /// </summary>
+    /// <param name="socket"></param>
+    /// <returns></returns>
+    private Dictionary<int, CanFrame> ReceiveData(RawCanSocket socket)
+    {
+
+        int length = 4;
+        CanFrame?[] frames = new CanFrame?[length];
+
+        // the canID's we're currently using
+        byte[] ids = new byte[]{1,2,3,4};
+
+        CanFrame input = new();
+        while(frames.Contains(null))
+        {
+            socket.Read(out input);
+            Console.WriteLine("Got Can Frame with ID: "+input.CanId);
+            int index = Array.IndexOf(ids, input.CanId);
+            if(index != -1)
+            {
+                frames[index]=input;
+            }
+        }
+
+        Console.WriteLine("All's good!");
+
+
+        Dictionary<int, CanFrame>toReturn = new();
+        for(int i = 0; i<length; i++)
+        {   
+            toReturn[ids[i]] = (CanFrame)frames[i]!;
+        }
+
+        return toReturn;
+    }
+
     private TransmissionData ReceivePacket(RawCanSocket socket)
     {
-        CanFrame frame1 = new();
-        CanFrame frame2 = new();
-        CanFrame frame3 = new();
-        CanFrame frame4 = new();
 
-        while (frame1.CanId != 1)
-        {
-            socket.Read(out frame1);
-            Console.WriteLine("!!!" + frame1.ToString());
-        }
-        Console.WriteLine("Frame1" + frame1.ToString());
 
-        while (frame2.CanId != 2)
-        {
-            socket.Read(out frame2);
-            Console.WriteLine("!!!" + frame2.ToString());
-        }
-        Console.WriteLine("Frame2" + frame2.ToString());
 
-        while (frame3.CanId != 3)
-        {
-            socket.Read(out frame3);
-            Console.WriteLine("!!!" + frame3.ToString());
-        }
-        Console.WriteLine("Frame3" + frame3.ToString());
-
-        while (frame4.CanId != 4)
-        {
-            socket.Read(out frame4);
-            Console.WriteLine("!!!" + frame4.ToString());
-        }
-        Console.WriteLine("Frame4" + frame4.ToString());
+        
+        Dictionary<int, CanFrame> frames = ReceiveData(socket);
 
         // I could set up nice code that you just configure stuff   
         // but I will not.
 
+        
+    
+
 
         // what wonderfully awful code. Indeed.
+        float hvBatteryVoltage =  (BitConverter.ToInt16(frames[1]!.Data, 0)) / 10.0f;
         TransmissionData toReturn = new TransmissionData()
         {
-            mainBatteryVoltage = (BitConverter.ToInt16(frame1.Data, 0)) / 10.0f,
-            batteryCurrent = (BitConverter.ToInt16(frame1.Data, 2)) / 10.0f,
-            carBatteryVoltage = frame1.Data[4] / 10.0f,
-            motorTemperature = frame2.Data[0] / 10.0f,
-            inverterTemperature = frame2.Data[1] / 10.0f,
-            throttlePercentage = frame3.Data[0] / 10.0f,
-            motorSpeed = (BitConverter.ToInt16(frame4.Data, 0)) / 10.0f,
-        };
+            mainBatteryVoltage = hvBatteryVoltage,
+            batteryCurrent = (BitConverter.ToInt16(frames[1]!.Data, 2)) / 10.0f,
+            carBatteryVoltage = frames[1].Data[4] / 10.0f,
+            motorTemperature = frames[2].Data[0] / 10.0f,
+            inverterTemperature = frames[2].Data[1] / 10.0f,
+            throttlePercentage = frames[3].Data[0] / 10.0f,
+            motorSpeed = (BitConverter.ToInt16(frames[4]!.Data, 0)) / 10.0f,
+            batteryConnector = hvBatteryVoltage>50,
+            bridgeControl = true,
+        };  
 
         return toReturn;
 

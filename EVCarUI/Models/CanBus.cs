@@ -17,7 +17,7 @@ public class CanBus : IDataReceiver, IUpdateOnReceiveData
     /// The interface that will be updated when new data is received
     /// </summary>
     public IUpdateOnReceiveData _toUpdate { get; init; }
-    
+
     /// <summary>
     /// Called by us when the program is started do all canbus receiving stuff here
     /// The IUpdateOnReceiveData will be used to update the app when new data comes
@@ -28,7 +28,7 @@ public class CanBus : IDataReceiver, IUpdateOnReceiveData
         _toUpdate = toUpdate;
         // passes random data this every 2 seconds
         // to simulate receiving data from canbus
-        Task.Run(()=> new CanData(this).ReceiveData());
+        Task.Run(() => new CanData(this).ReceiveData());
     }
 
     /// <summary>
@@ -37,7 +37,7 @@ public class CanBus : IDataReceiver, IUpdateOnReceiveData
     /// hence we call that
     /// </summary>
     public void Update(TransmissionData data) => OnNewDataReceived(data);
-    
+
     /// <summary>
     /// A function to be called when we data is received.
     /// For now just updates the interface that wants to be updated (i.e the MainWindowViewModel)
@@ -61,16 +61,16 @@ public class CanData : IDataReceiver
     {
         // I'm not incredibly familiar with asyncronous code so if this is dumb, then...
         // Uh, I guess I wouldn't be surprised.
-        
+
         CanNetworkInterface can0 = CanNetworkInterface.GetAllInterfaces(true).First();
-        using(RawCanSocket socket = new())
+        using (RawCanSocket socket = new())
         {
-    
+
             socket.Bind(can0);
-            while(true) 
+            while (true)
             {
                 TransmissionData data = ReceivePacket(socket);
-            
+
                 OnNewDataReceived(data);
             }
 
@@ -82,34 +82,57 @@ public class CanData : IDataReceiver
     {
         CanFrame frame1 = new();
         CanFrame frame2 = new();
-        while(frame1.CanId != 1)
+        CanFrame frame3 = new();
+        CanFrame frame4 = new();
+
+        while (frame1.CanId != 1)
         {
             socket.Read(out frame1);
-            Console.WriteLine("!!!"+frame1.ToString());    
+            Console.WriteLine("!!!" + frame1.ToString());
         }
-        Console.WriteLine("Frame1"+frame1.ToString());
+        Console.WriteLine("Frame1" + frame1.ToString());
 
-        /*while(frame2.CanId != 2)
+        while (frame2.CanId != 2)
         {
             socket.Read(out frame2);
-        }*/
-        //Console.WriteLine("Frame2"+frame1.ToString());
+            Console.WriteLine("!!!" + frame2.ToString());
+        }
+        Console.WriteLine("Frame2" + frame2.ToString());
+
+        while (frame3.CanId != 3)
+        {
+            socket.Read(out frame3);
+            Console.WriteLine("!!!" + frame3.ToString());
+        }
+        Console.WriteLine("Frame3" + frame3.ToString());
+
+        while (frame4.CanId != 4)
+        {
+            socket.Read(out frame4);
+            Console.WriteLine("!!!" + frame4.ToString());
+        }
+        Console.WriteLine("Frame4" + frame4.ToString());
 
         // I could set up nice code that you just configure stuff   
         // but I will not.
-        
+
 
         // what wonderfully awful code. Indeed.
-        TransmissionData toReturn = new TransmissionData(){
-            mainBatteryVoltage =(BitConverter.ToInt16(frame1.Data, 0))/10.0f,
-            batteryCurrent = (BitConverter.ToInt16(frame1.Data, 2))/10.0f,
-            carBatteryVoltage = frame1.Data[4]/10.0f
+        TransmissionData toReturn = new TransmissionData()
+        {
+            mainBatteryVoltage = (BitConverter.ToInt16(frame1.Data, 0)) / 10.0f,
+            batteryCurrent = (BitConverter.ToInt16(frame1.Data, 2)) / 10.0f,
+            carBatteryVoltage = frame1.Data[4] / 10.0f,
+            motorTemperature = frame2.Data[0] / 10.0f,
+            inverterTemperature = frame2.Data[1] / 10.0f,
+            throttlePercentage = frame3.Data[0] / 10.0f,
+            motorSpeed = (BitConverter.ToInt16(frame4.Data, 0)) / 10.0f,
         };
 
         return toReturn;
 
 
-    }   
+    }
 }
 
 
@@ -129,13 +152,13 @@ public class RandomData : IDataReceiver
     }
 
     public IUpdateOnReceiveData _toUpdate { get; init; }
-    
+
     private readonly double Increment = 5;
     private readonly int loopsToWaitBeforeStarting = 1;
     private int loopsCompleted = 0;
-    private float GetRandomFloat(float num) => num * 3 / 4f + loopsCompleted/100f * num;
+    private float GetRandomFloat(float num) => num * 3 / 4f + loopsCompleted / 100f * num;
     private bool GetRandomBool() => new Random().NextDouble() > 0.5;
-    
+
     // This can be used as a sample to see how to set data
     // instead of GetRandom, use actual data
     public async Task RepeatSendRandomData()
@@ -152,7 +175,7 @@ public class RandomData : IDataReceiver
 
             loopsCompleted++;
             OnNewDataReceived(new TransmissionData(
-                    GetRandomFloat(300), 
+                    GetRandomFloat(300),
                     GetRandomFloat(300),
                     GetRandomFloat(12),
                     GetRandomFloat(25),
@@ -160,13 +183,13 @@ public class RandomData : IDataReceiver
                     GetRandomFloat(25),
                     GetRandomFloat(60),
                     GetRandomFloat(5000),
-                    (float) Increment * (loopsCompleted - loopsToWaitBeforeStarting) % 100,
-                    (float) Increment * (loopsCompleted - loopsToWaitBeforeStarting) % 100,
+                    (float)Increment * (loopsCompleted - loopsToWaitBeforeStarting) % 100,
+                    (float)Increment * (loopsCompleted - loopsToWaitBeforeStarting) % 100,
                     GetRandomBool(),
                     GetRandomBool(),
                     GetRandomBool()));
         }
     }
     public void OnNewDataReceived(TransmissionData data) => _toUpdate.Update(data);
-    
+
 }

@@ -100,8 +100,7 @@ public class CanData : IDataReceiver
         while(received<length)
         {
             socket.Read(out input);
-            Console.WriteLine("Got Can Frame with ID: "+input.CanId);
-            //int index = Array.IndexOf(ids, input.CanId);
+            //Console.WriteLine("Got Can Frame with ID: "+input.CanId);
             int index = ids.IndexOf(input.CanId);
             if(index != -1 && frames[index]==null)
             {
@@ -135,9 +134,9 @@ public class CanData : IDataReceiver
         // but I will not.
 
         
-    
+        
 
-
+      
         // what wonderfully awful code. Indeed.
         float hvBatteryVoltage =  (BitConverter.ToInt16(frames[1]!.Data, 0)) / 10.0f;
         TransmissionData toReturn = new TransmissionData()
@@ -146,13 +145,14 @@ public class CanData : IDataReceiver
             batteryCurrent = (BitConverter.ToInt16(frames[1]!.Data, 2)) / 10.0f,
             carBatteryVoltage = frames[1].Data[4] / 10.0f,
             motorTemperature = frames[2].Data[0] / 10.0f,
-            inverterTemperature = frames[2].Data[1] / 10.0f,
-            throttlePercentage = frames[3].Data[0] / 10.0f,
-            motorSpeed = (BitConverter.ToInt16(frames[4]!.Data, 0)) / 10.0f,
+            inverterTemperature = frames[2].Data[1]/10.0f,
+            throttlePercentage =  (BitConverter.ToInt16(frames[3]!.Data, 0)/10f-1744f) / (3500f-1744f) * 100f, // 1744-3500
+            motorSpeed = (BitConverter.ToUInt16(frames[4]!.Data, 0)),
             batteryConnector = hvBatteryVoltage>50,
             bridgeControl = true,
         };  
 
+        Console.WriteLine("Throttle: "+BitConverter.ToInt16(frames[3]!.Data, 0));
         return toReturn;
 
 

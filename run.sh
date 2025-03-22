@@ -1,6 +1,6 @@
 #!/bin/bash
 #/home/user/Desktop/Car\ UI/EV\ Car\ UI
-pi_ip='192.168.12.245'
+pi_ip='10.42.0.69'
 piname='carTest'
 projname='EVCarUI'  #'CanTest'
 

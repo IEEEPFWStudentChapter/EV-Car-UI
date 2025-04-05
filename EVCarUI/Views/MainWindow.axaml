@@ -125,6 +125,7 @@
 					Classes="UnitsLabel" 
 					FontSize="50"
 					Content="rpm"/>
+
 			</DockPanel>
 		</Grid>
 		
@@ -181,29 +182,39 @@
 		    >
 			<StackPanel
 				Name="Flags"
-				VerticalAlignment="Center"
+				VerticalAlignment="Top"
 				Grid.Row="0">
 				<Label 
 					Classes="StatusLabelTop"
 					Content="Battery Connector"/>
 				<Border
 					Background="{Binding BatteryConnector}"
-					Classes="Status">
+					Classes="Status"
+					Height="50">
 				</Border>
 				<Label 
 					Classes="StatusLabel"
 					Content="Bridge Control"/>
 				<Border
 					Background="{Binding BridgeControl}"
-					Classes="Status">
+					Classes="Status"
+					Height="50">
 				</Border>
 				<Label 
 					Classes="StatusLabel"
 					Content="Derating Different"/>
 				<Border
 					Background="{Binding Derating}"
-					Classes="Status">
+					Classes="Status"
+					Height="50">
 				</Border>
+			    <Label
+					BorderBrush="#a9a9a9"
+					BorderThickness="7"
+					Height="300"
+					Margin="20"
+				    />
+			        <Image Source="/Assets/warning.png"/>
 			</StackPanel>
 	    </Grid>
     </Grid>

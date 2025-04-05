@@ -11,6 +11,15 @@ using ReactiveUI;
 
 namespace EV_Car_UI.ViewModels;
 
+// Enum for determining last error code
+enum Error
+{
+    NONE, OVERCURRENT, THROTTLE1, THROTTLE2, CANTIMEOUT, EMCYSTOP, MPROT, DESAT,
+    OVERVOLTAGE, ENCODER, PRECHARGE, TMPHSMAX, CURRENTLIMIT, PWMSTUCK, HICUROFS12,
+    HICUROFS2, HIRESOFS, LORESAMP
+};
+
+
 public partial class MainWindowViewModel : ViewModelBase, IUpdateOnReceiveData
 {
     // fields that store the data that is shown on UI
@@ -33,7 +42,10 @@ public partial class MainWindowViewModel : ViewModelBase, IUpdateOnReceiveData
      [Notify] private bool _deratingValue;
      [Notify] private bool _batteryConnectorValue;
      [Notify] private bool _bridgeControlValue;
-     
+
+
+     private Dictionary<Error, string> ErrorDescription;
+
      [Notify] private float _barHeight = 480f;
      
      private readonly IBrush BlackColor = new SolidColorBrush(Colors.Black);
@@ -51,6 +63,7 @@ public partial class MainWindowViewModel : ViewModelBase, IUpdateOnReceiveData
     public string BatteryTemperature => $"{BatteryTemperatureValue:0.00} °C";
     public string WheelSpeed => $"{WheelSpeedValue:0.0}";
     public string MotorSpeed => $"{MotorSpeedValue:0.0}";
+    public string ErrorMessage;
     public IBrush BatteryConnector => BatteryConnectorValue ? BlackColor : WhiteColor;
     public IBrush BridgeControl => BridgeControlValue ? BlackColor : WhiteColor;
     public IBrush Derating => DeratingValue ? BlackColor : WhiteColor;

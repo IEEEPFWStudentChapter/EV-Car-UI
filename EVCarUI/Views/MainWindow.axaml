@@ -208,13 +208,15 @@
 					Classes="Status"
 					Height="50">
 				</Border>
-			    <Label
-					BorderBrush="#a9a9a9"
-					BorderThickness="7"
-					Height="300"
-					Margin="20"
-				    />
-			        <Image Source="/Assets/warning.png"/>
+			    <Image 
+					Source="/Assets/warning.png" 
+					Height="100" 
+					Margin="50"/>
+				<Label
+	                DockPanel.Dock="Top"
+	                FontSize="30"
+					HorizontalAlignment="Center"
+	                Content="{Binding ErrorMessage}"/>
 			</StackPanel>
 	    </Grid>
     </Grid>
